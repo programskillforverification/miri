@@ -36,7 +36,7 @@ pub trait EvalContextExt<'tcx>: crate::MiriInterpCxExt<'tcx> {
         let nfds: u64 = ecx.read_scalar(nfds)?.to_uint(nfds.layout.size)?.try_into().unwrap();
         let timeout = ecx.read_scalar(timeout)?.to_i32()?;
 
-        // POSIX requires EINVAL if `nfds` is greater than {OPEN_MAX}.
+        // POSIX requires EINVAL if `nfds` is greater than OPEN_MAX.
         if nfds > u64::from(OPEN_MAX) {
             return ecx.set_errno_and_return_neg1(LibcError("EINVAL"), dest);
         }
